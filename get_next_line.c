@@ -12,14 +12,14 @@
 
 #include "get_next_line.h"
 
-static int	print_err(char *str)
+static char	*ft_putstr(char *str)
 {
 	while (*str)
 	{
 		write(1, str++, 1);
 	}
 	write(1, "\n", 1);
-	return (-1);
+	return(str);
 }
 /*
 static char	*ft_strchr(const char *s, int c)
@@ -36,7 +36,7 @@ char	*get_next_line(int fd)
 	char	*line_buffer;
 	int		line_size;
 	int		char_read;
-	char	*read_buffer[BUFFER_SIZE];
+	char	read_buffer[BUFFER_SIZE];
 
 	line_size = 0;
 //	while ()
@@ -44,8 +44,8 @@ char	*get_next_line(int fd)
 	line_buffer = (char *)malloc(line_size * sizeof(char));
 	char_read = read(fd, read_buffer, line_size - 1);
 	if (char_read == -1)
-		print_err("Error reading file");
-
+		return (ft_putstr("Error reading file"));
+	ft_putstr(read_buffer);
 	return (line_buffer);
 }
 
@@ -62,7 +62,7 @@ int		main(int argc, char **argv)
 		return (-1);
 	
 	printf("fd created with code %d\n", fd);
-	print_err("Print error test");
+	ft_putstr("Print error test");
 	
 	get_next_line(fd);
 	close(fd);
