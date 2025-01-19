@@ -29,25 +29,55 @@ static char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+static void	ft_strcat(char **line_buffer, size_t *line_size, char *read_buffer, size_t  char_read)
+{
+	char	*cat_line;
+	size_t	i_line;
+	size_t	i_buffer;
+
+	*line_size += char_read;
+	cat_line = (char *)malloc((*line_size + 1) * sizeof(char));
+	if (!cat_line)
+		return ;
+
+	i_line = 0;
+	if (*line_buffer)
+	{
+		while (*line_buffer)
+		{
+			cat_line[i_line] = *(line_buffer[i_line]);
+			i_line++;
+		}
+	}
+
+	i_buffer = 0;
+	while (i_buffer < char_read)
+		cat_line[i_line++] = read_buffer[i_buffer++];
+	free(*line_buffer);
+	*line_buffer = cat_line;
+}
+
 char	*get_next_line(int fd)
 {
 	char	*line_buffer;
-	int		line_size;
-	int		char_read;
+	size_t	char_read;
 	char	*next_line;
 	char	read_buffer[BUFFER_SIZE];
+	size_t	line_size;
 
-	next_line = NULL;
 	line_size = 0;
+	line_buffer = NULL;
+	next_line = NULL;
 	while (!next_line)
 	{
 		char_read = read(fd, read_buffer, BUFFER_SIZE);
-		if (char_read == -1)
+		if ((int)char_read == -1)
 			return (ft_putstr("Error reading file"));
 		next_line = ft_strchr(read_buffer, '\n');
 		ft_putstr(read_buffer);
-		line_size += (BUFFER_SIZE - 1);
-		line_buffer = (char *)malloc((line_size + 1) * sizeof(char));
+		if (!next_line)
+			ft_strcat(&line_buffer, &line_size, read_buffer, char_read);
+		ft_putstr(line_buffer);
 	}
 	return (ft_putstr(line_buffer));
 }
