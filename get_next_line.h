@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/01/22 23:35:55 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/01/23 03:46:32 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@
 # include <strings.h>
 # include <stdlib.h>
 # include <fcntl.h>
+
+typedef struct s_fd_node
+{
+	int				fd;
+	char 			*next_line;
+	struct s_fd_node	*next_fd_node;
+} t_fd_node;
+
+extern t_fd_node *fd_list_head;
 
 char	*get_next_line(int fd);
 
