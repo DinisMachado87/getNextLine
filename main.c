@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:31:28 by dimachad          #+#    #+#             */
-/*   Updated: 2025/01/23 05:22:31 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/04 02:32:36 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ typedef struct s_line_test
 
 t_line_test	*add_test(int fd)
 {
-	static t_line_test	*fd_test;
+	t_line_test	*fd_test;
 
 	fd_test = (t_line_test *)malloc(sizeof(t_line_test));
 	fd_test->line = NULL;
@@ -43,18 +43,33 @@ int	main(int argc, char **argv)
 	fd2 = add_test(open(argv[2], O_RDONLY));
 	if (!fd2)
 		return (-1);
-	fd1->line = get_next_line(fd1->fd); 
-	fd2->line = get_next_line(fd2->fd);
-	while (fd1->line || fd2->line)
+	while (1)
 	{
 		fd1->line = get_next_line(fd1->fd); 
 		fd2->line = get_next_line(fd2->fd);
 		if (fd1->line)
-			printf("%s", fd1->line);
+		{
+			printf("MAIN:%s", fd1->line);
+			free(fd1->line);
+		}
 		if (fd2->line)
-			printf("%s", fd2->line);
+		{
+			printf("MAIN:%s", fd2->line);
+			free(fd2->line);
+		}
+		if (!fd1->line)
+			printf("Fd1 over\n");
+		if (!fd2->line)
+			printf("Fd2 over\n");
+		if ((!fd1->line) && (!fd2->line))
+		{
+			printf("Both Fd over\n");
+			break;
+		}
 	}
 	close(fd1->fd);
 	close(fd2->fd);
+	free(fd1);
+	free(fd2);
 	return (0);
 }
