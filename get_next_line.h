@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/04 02:57:40 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/04 03:34:55 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ typedef struct		s_fd_node
 	struct s_fd_node	*next_fd_node;
 	struct s_fd_node	*prev_fd_node;
 } t_fd_node;
+
+extern t_fd_node	*fd_list_head;
 
 char				*get_next_line(int fd);
 

@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/04 03:15:49 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/04 04:50:07 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ t_fd_node	*get_or_add_node(int fd)
 
 void	*free_node(struct s_fd_node *fd_node)
 {
+	if (fd_node->next_line)
+        free(fd_node->next_line);
 	if (fd_node->prev_fd_node)
 		fd_node->prev_fd_node->next_fd_node = fd_node->next_fd_node;
 	else
@@ -115,16 +117,31 @@ void	*free_node(struct s_fd_node *fd_node)
 	return (NULL);
 }
 
+void	*ft_calloc(ssize_t str_size)
+{
+	char *str_ptr;
+	ssize_t	i_ltr;
+
+	i_ltr = 0;
+	str_ptr = (char *)malloc((str_size + 1) * sizeof(char));
+	if (!str_ptr)
+		return (NULL);
+	while (i_ltr <= (str_size))
+	{
+		str_ptr[i_ltr] = '\0';
+		i_ltr++;
+	}
+	return (str_ptr);
+}
+
 char	*get_next_line(int fd)
 {
-	static t_fd_node	*fd_list_head;
 	t_fd_node			*fd_node;
 	char				*line_buffer;
 	ssize_t				char_read;
-	char				read_buffer[BUFFER_SIZE + 1];
+	char				*read_buffer;
 	ssize_t				line_size;
 	
-	fd_list_head = NULL;
 	fd_node = get_or_add_node(fd);
 	line_size = 0;
 	line_buffer = NULL;
@@ -133,18 +150,25 @@ char	*get_next_line(int fd)
 	fd_node->next_line = NULL;
 	while (!fd_node->next_line)
 	{
+		read_buffer = ft_calloc(BUFFER_SIZE);
+		if (!read_buffer)
+			return (NULL);
 		char_read = read(fd, read_buffer, BUFFER_SIZE);
-		if ((int)char_read <= 0)
+		if (char_read <= 0)
 		{
 			if (line_buffer)
 				free (line_buffer);
 			if (fd_node)
 				fd_node = free_node(fd_node);
+			free(read_buffer);
 			return (NULL);
 		}
-		read_buffer[BUFFER_SIZE] = '\0';
+		read_buffer[char_read] = '\0';
+		if (!read_buffer)
+			return (NULL);
 		fd_node->next_line = ft_strchr(read_buffer, '\n', &char_read);
 		line_buffer = ft_strcat(line_buffer, &line_size, read_buffer, char_read);
+		free (read_buffer);
 		if (fd_node->next_line)
 			return (line_buffer);
 	}
