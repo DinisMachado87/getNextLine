@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:31:28 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/05 21:02:25 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:51:38 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ typedef struct s_line_test
 {
 	char	*line;
 	int		fd;
-} t_line_test;
+}	t_line_test;
 
 t_line_test	*add_test(int fd)
 {
@@ -26,7 +26,6 @@ t_line_test	*add_test(int fd)
 	fd_test = (t_line_test *)malloc(sizeof(t_line_test));
 	fd_test->line = NULL;
 	fd_test->fd = fd;
-
 	return (fd_test);
 }
 
@@ -60,7 +59,7 @@ int	main(int argc, char **argv)
 		if ((!fd1->line) && (!fd2->line))
 		{
 			printf("Both Fd over\n");
-			break;
+			break ;
 		}
 	}
 	close(fd1->fd);

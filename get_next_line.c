@@ -6,18 +6,17 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/05 21:01:41 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:50:04 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-
 static char	*ft_strchr(char *init_str, int c, ssize_t *char_read)
 {
 	const char	*s;
-	char 		*new_line;
+	char		*new_line;
 	ssize_t		new_line_count;
 
 	new_line = NULL;
@@ -31,7 +30,7 @@ static char	*ft_strchr(char *init_str, int c, ssize_t *char_read)
 		*char_read = (ssize_t)(s - init_str);
 		while (s[new_line_count])
 			new_line_count++;
-		new_line = (char *)malloc((new_line_count + 1)*sizeof(char));
+		new_line = (char *)malloc((new_line_count + 1) * sizeof(char));
 		if (!new_line)
 			return (NULL);
 		new_line_count = 0;
@@ -46,7 +45,8 @@ static char	*ft_strchr(char *init_str, int c, ssize_t *char_read)
 	return (NULL);
 }
 
-static char	*ft_strcat(char *line_buffer, ssize_t *line_size, char *read_buffer, ssize_t char_read)
+static char	*ft_strcat(char *line_buffer, ssize_t *line_size,
+	char *read_buffer, ssize_t char_read)
 {
 	char	*cat_line;
 	ssize_t	i_line;
@@ -69,56 +69,14 @@ static char	*ft_strcat(char *line_buffer, ssize_t *line_size, char *read_buffer,
 		i_buffer++;
 	}
 	cat_line[i_line + i_buffer] = '\0';
-	if(line_buffer)
+	if (line_buffer)
 		free(line_buffer);
 	return (cat_line);
 }
 
-t_fd_node	*get_or_add_node(int fd, t_fd_node *fd_list_head)
-{
-	t_fd_node			*fd_node;
-	t_fd_node			*current_node;
-	t_fd_node			*prev_node;
-
-	current_node = fd_list_head;
-	prev_node = NULL;
-	while (current_node && (current_node->fd != fd))
-	{
-		prev_node = current_node;
-		current_node = current_node->next_fd_node;
-	}
-	if (current_node)
-		return (current_node);
-	fd_node = (t_fd_node *)malloc(sizeof(t_fd_node));
-	if (!fd_node)
-		return (NULL);
-	fd_node->fd = fd;
-	fd_node->next_line = NULL;
-	fd_node->next_fd_node = fd_list_head;
-	fd_node->prev_fd_node = NULL;
-	if (fd_list_head)
-		fd_node->prev_fd_node = prev_node;
-	fd_list_head = fd_node;
-	return (fd_node);
-}
-
-void	*free_node(struct s_fd_node *fd_node, t_fd_node *fd_list_head)
-{
-	if (fd_node->next_line)
-        free(fd_node->next_line);
-	if (fd_node->prev_fd_node)
-		fd_node->prev_fd_node->next_fd_node = fd_node->next_fd_node;
-	else
-		fd_list_head = fd_node->next_fd_node;
-	if (fd_node->next_fd_node)
-		fd_node->next_fd_node->prev_fd_node = fd_node->prev_fd_node;
-	free(fd_node);
-	return (NULL);
-}
-
 void	*ft_calloc(ssize_t str_size)
 {
-	char *str_ptr;
+	char	*str_ptr;
 	ssize_t	i_ltr;
 
 	i_ltr = 0;
@@ -141,8 +99,8 @@ char	*get_next_line(int fd)
 	ssize_t				char_read;
 	char				*read_buffer;
 	ssize_t				line_size;
-	
-	fd_node = get_or_add_node(fd, fd_list_head);
+
+	fd_node = get_or_add_node(fd, &fd_list_head);
 	line_size = 0;
 	line_buffer = NULL;
 	if (fd_node->next_line)
@@ -159,7 +117,7 @@ char	*get_next_line(int fd)
 			if (line_buffer)
 				free (line_buffer);
 			if (fd_node)
-				fd_node = free_node(fd_node, fd_list_head);
+				fd_node = free_node(fd_node, &fd_list_head);
 			free(read_buffer);
 			return (NULL);
 		}
@@ -167,7 +125,8 @@ char	*get_next_line(int fd)
 		if (!read_buffer)
 			return (NULL);
 		fd_node->next_line = ft_strchr(read_buffer, '\n', &char_read);
-		line_buffer = ft_strcat(line_buffer, &line_size, read_buffer, char_read);
+		line_buffer = ft_strcat(line_buffer, &line_size,
+				read_buffer, char_read);
 		free (read_buffer);
 		if (fd_node->next_line)
 			return (line_buffer);
