@@ -6,14 +6,13 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/04 04:50:07 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:01:41 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-t_fd_node	*fd_list_head = NULL;
 
 static char	*ft_strchr(char *init_str, int c, ssize_t *char_read)
 {
@@ -75,7 +74,7 @@ static char	*ft_strcat(char *line_buffer, ssize_t *line_size, char *read_buffer,
 	return (cat_line);
 }
 
-t_fd_node	*get_or_add_node(int fd)
+t_fd_node	*get_or_add_node(int fd, t_fd_node *fd_list_head)
 {
 	t_fd_node			*fd_node;
 	t_fd_node			*current_node;
@@ -103,7 +102,7 @@ t_fd_node	*get_or_add_node(int fd)
 	return (fd_node);
 }
 
-void	*free_node(struct s_fd_node *fd_node)
+void	*free_node(struct s_fd_node *fd_node, t_fd_node *fd_list_head)
 {
 	if (fd_node->next_line)
         free(fd_node->next_line);
@@ -136,13 +135,14 @@ void	*ft_calloc(ssize_t str_size)
 
 char	*get_next_line(int fd)
 {
+	static t_fd_node	*fd_list_head = NULL;
 	t_fd_node			*fd_node;
 	char				*line_buffer;
 	ssize_t				char_read;
 	char				*read_buffer;
 	ssize_t				line_size;
 	
-	fd_node = get_or_add_node(fd);
+	fd_node = get_or_add_node(fd, fd_list_head);
 	line_size = 0;
 	line_buffer = NULL;
 	if (fd_node->next_line)
@@ -159,7 +159,7 @@ char	*get_next_line(int fd)
 			if (line_buffer)
 				free (line_buffer);
 			if (fd_node)
-				fd_node = free_node(fd_node);
+				fd_node = free_node(fd_node, fd_list_head);
 			free(read_buffer);
 			return (NULL);
 		}

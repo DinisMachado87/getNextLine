@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:31:28 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/04 02:32:36 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/05 21:02:25 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,6 @@ int	main(int argc, char **argv)
 			printf("MAIN:%s", fd2->line);
 			free(fd2->line);
 		}
-		if (!fd1->line)
-			printf("Fd1 over\n");
-		if (!fd2->line)
-			printf("Fd2 over\n");
 		if ((!fd1->line) && (!fd2->line))
 		{
 			printf("Both Fd over\n");
