@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/05 22:50:04 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/06 03:56:35 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ static char	*ft_strcat(char *line_buffer, ssize_t *line_size,
 		cat_line[i_line] = line_buffer[i_line];
 		i_line++;
 	}
+	if (line_buffer)
+		free(line_buffer);
 	i_buffer = 0;
 	while (i_buffer < char_read)
 	{
@@ -69,8 +71,6 @@ static char	*ft_strcat(char *line_buffer, ssize_t *line_size,
 		i_buffer++;
 	}
 	cat_line[i_line + i_buffer] = '\0';
-	if (line_buffer)
-		free(line_buffer);
 	return (cat_line);
 }
 
@@ -104,32 +104,35 @@ char	*get_next_line(int fd)
 	line_size = 0;
 	line_buffer = NULL;
 	if (fd_node->next_line)
+	{
 		line_buffer = fd_node->next_line; 
-	fd_node->next_line = NULL;
+		fd_node->next_line = NULL;
+	}
 	while (!fd_node->next_line)
 	{
 		read_buffer = ft_calloc(BUFFER_SIZE);
 		if (!read_buffer)
+		{
+			if (line_buffer)
+				free(line_buffer);
 			return (NULL);
+		}
 		char_read = read(fd, read_buffer, BUFFER_SIZE);
 		if (char_read <= 0)
 		{
+			free(read_buffer);
+			if (char_read == 0 && line_buffer && (line_buffer[0] != '\0'))
+				return (line_buffer);
 			if (line_buffer)
 				free (line_buffer);
-			if (fd_node)
-				fd_node = free_node(fd_node, &fd_list_head);
-			free(read_buffer);
+			fd_node = free_node(fd_node, &fd_list_head);
 			return (NULL);
 		}
 		read_buffer[char_read] = '\0';
-		if (!read_buffer)
-			return (NULL);
 		fd_node->next_line = ft_strchr(read_buffer, '\n', &char_read);
 		line_buffer = ft_strcat(line_buffer, &line_size,
 				read_buffer, char_read);
 		free (read_buffer);
-		if (fd_node->next_line)
-			return (line_buffer);
 	}
 	return (line_buffer);
-}
+	}

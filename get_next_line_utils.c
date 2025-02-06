@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:36:51 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/05 22:47:40 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/06 03:11:24 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	*free_node(struct s_fd_node *fd_node, t_fd_node **fd_list_head)
 {
+	if (!fd_node)
+		return (NULL);
 	if (fd_node->next_line)
 		free(fd_node->next_line);
 	if (fd_node->prev_fd_node)
@@ -49,7 +51,7 @@ t_fd_node	*get_or_add_node(int fd, t_fd_node **fd_list_head)
 	fd_node->next_fd_node = *fd_list_head;
 	fd_node->prev_fd_node = NULL;
 	if (*fd_list_head)
-		fd_node->prev_fd_node = prev_node;
+		(*fd_list_head)->prev_fd_node = prev_node;
 	*fd_list_head = fd_node;
 	return (fd_node);
 }
