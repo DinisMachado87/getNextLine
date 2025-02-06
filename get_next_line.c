@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/06 03:56:35 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/06 05:03:37 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,19 @@ char	*get_next_line(int fd)
 	line_buffer = NULL;
 	if (fd_node->next_line)
 	{
+
+/*	- Refactor ft_str_chr into separated functions:
+			- one that checks for the index of char c if it exists 
+			- and (SPLIT)another that actually separates the string in two
+	- so that it is reusable here to handle cases of several consecutive new lines
+			- returning imidiatelly new Line untill the '\n' 
+			- and setting new line with the remaining string:
+*/	
+//		while (fd_node->next_line)
+//		{
+//			fd_node->next_line++;
+//			return ("\n");
+//		}
 		line_buffer = fd_node->next_line; 
 		fd_node->next_line = NULL;
 	}
