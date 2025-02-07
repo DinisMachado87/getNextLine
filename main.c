@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dimachad <dimachad@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 23:31:28 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/06 01:27:59 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/07 18:29:31 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 #include <stdio.h>
 #include <fcntl.h>  // For open()
@@ -35,6 +36,7 @@ int main(int argc, char **argv)
 {
     t_line_test *fd1;
     t_line_test *fd2;
+    
     int fd1_done = 0;
     int fd2_done = 0;
 
@@ -77,6 +79,8 @@ int main(int argc, char **argv)
             }
         }
     }
+    
+    
 
     printf("Both Fd over\n");
     close(fd1->fd);

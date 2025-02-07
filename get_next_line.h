@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/05 23:59:00 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/07 15:29:27 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ typedef struct s_fd_node
 }	t_fd_node;
 
 char		*get_next_line(int fd);
-
 void		*free_node(struct s_fd_node *fd_node, t_fd_node **fd_list_head);
-
 t_fd_node	*get_or_add_node(int fd, t_fd_node **fd_list_head);
 
 #endif
