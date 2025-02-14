@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/12 22:07:53 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/17 01:15:12 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_fd_node
 	ssize_t 			char_read;
 	char				*next_line;
 	char				*line_buffer;
+	int					end;
 }	t_fd_node;
 
 char		*get_next_line(int fd);

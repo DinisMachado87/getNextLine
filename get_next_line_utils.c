@@ -6,16 +6,12 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:36:51 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/13 03:58:24 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/17 01:21:08 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
-** - Frees the node and removes it from the list.
-**
-** Return: NULL
-**/
 #include "get_next_line.h"
+#include <stdio.h>
 
 void	*free_node(t_fd_node *fd_node, t_fd_node **fd_list_head)
 {
@@ -32,12 +28,6 @@ void	*free_node(t_fd_node *fd_node, t_fd_node **fd_list_head)
 	return (NULL);
 }
 
-/**
- ** - Gets the node corresponding to the fd.
- ** - If the node does not exist, it creates a new node.
- ** 
- ** Return: The node corresponding to the fd or a new node.
- */
 t_fd_node *get_or_add_node(int fd, t_fd_node **fd_list_head)
 {
 	t_fd_node *current_node;
@@ -56,6 +46,7 @@ t_fd_node *get_or_add_node(int fd, t_fd_node **fd_list_head)
 	current_node->char_read = 0;
 	current_node->next_fd_node = *fd_list_head;
 	current_node->prev_fd_node = NULL;
+	current_node->end = 0;
 	if (*fd_list_head)
 		(*fd_list_head)->prev_fd_node = current_node;
 	*fd_list_head = current_node;
