@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/17 16:07:42 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:18:22 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int ft_strchr(char *str, int c, ssize_t *char_read)
 		*char_read = i_chr;
 		return (*char_read);
 	}
-	if ((str[i_chr + 1]) && ((str)[i_chr] == (char)c) && ((str)[i_chr + 1] != '\0'))
+	if ((str[i_chr]) && (str[i_chr + 1]) && ((str)[i_chr] == (char)c))
 	{
 		*char_read = i_chr;
 		return (*char_read);
@@ -144,7 +144,7 @@ char *build_ln(t_fd_nd **fd_nd, t_fd_nd **fd_head)
 	}
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	static t_fd_nd *fd_head = NULL;
 	t_fd_nd *fd_nd;
