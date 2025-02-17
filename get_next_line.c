@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/17 15:50:25 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/17 16:07:42 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ char	*ft_strjoin(char *str_1, char *str_2)
 	return (joined_str);
 }
 
-char *read_until_new_line_or_eof(t_fd_nd **fd_nd)
+char *read_until_new_ln_or_eof(t_fd_nd **fd_nd)
 {
 	char *read_buffer;
 
@@ -108,39 +108,39 @@ char *read_until_new_line_or_eof(t_fd_nd **fd_nd)
 	{
 		(*fd_nd)->end = 1;
 		read_buffer = free_and_null_str(read_buffer);
-		if ((*fd_nd)->line_buffer)
-			return ((*fd_nd)->line_buffer);
+		if ((*fd_nd)->ln_buffer)
+			return ((*fd_nd)->ln_buffer);
 		return (NULL);
 	}
 	read_buffer[(*fd_nd)->char_read] = '\0';
-	if ((*fd_nd)->line_buffer)
-		(*fd_nd)->line_buffer = ft_strjoin((*fd_nd)->line_buffer, read_buffer);
+	if ((*fd_nd)->ln_buffer)
+		(*fd_nd)->ln_buffer = ft_strjoin((*fd_nd)->ln_buffer, read_buffer);
 	else
 	{
-		(*fd_nd)->line_buffer = read_buffer;
+		(*fd_nd)->ln_buffer = read_buffer;
 		read_buffer = NULL;
 	}
-	return ((*fd_nd)->line_buffer);
+	return ((*fd_nd)->ln_buffer);
 }
 
-char *build_line(t_fd_nd **fd_nd, t_fd_nd **fd_head)
+char *build_ln(t_fd_nd **fd_nd, t_fd_nd **fd_head)
 {
 	char *final_str;
 
 	final_str = NULL;
 	while (1)
 	{
-		(*fd_nd)->line_buffer = read_until_new_line_or_eof(fd_nd);
+		(*fd_nd)->ln_buffer = read_until_new_ln_or_eof(fd_nd);
 		if ((*fd_nd)->end)
 		{
-			final_str = ft_strjoin((*fd_nd)->line_buffer, final_str);
+			final_str = ft_strjoin((*fd_nd)->ln_buffer, final_str);
 			free_node(fd_nd, fd_head);
 			return (final_str);
 		}
-		if (!(*fd_nd)->line_buffer)
+		if (!(*fd_nd)->ln_buffer)
 			return (NULL);
-		if (ft_strchr((*fd_nd)->line_buffer, '\n', &(*fd_nd)->char_read))
-			return (ft_split(&(*fd_nd)->line_buffer, &(*fd_nd)->next_line, (*fd_nd)->char_read + 1));
+		if (ft_strchr((*fd_nd)->ln_buffer, '\n', &(*fd_nd)->char_read))
+			return (ft_split(&(*fd_nd)->ln_buffer, &(*fd_nd)->next_ln, (*fd_nd)->char_read + 1));
 	}
 }
 
@@ -154,12 +154,12 @@ char *get_next_line(int fd)
 	fd_nd = get_or_add_node(fd, &fd_head);
 	if (!fd_nd)
 		return (NULL);
-	if (fd_nd->next_line)
+	if (fd_nd->next_ln)
 	{
-		fd_nd->line_buffer = fd_nd->next_line;
-		fd_nd->next_line = NULL;
-		if (ft_strchr(fd_nd->line_buffer, '\n', &fd_nd->char_read))
-			return (ft_split(&fd_nd->line_buffer, &fd_nd->next_line, fd_nd->char_read + 1));
+		fd_nd->ln_buffer = fd_nd->next_ln;
+		fd_nd->next_ln = NULL;
+		if (ft_strchr(fd_nd->ln_buffer, '\n', &fd_nd->char_read))
+			return (ft_split(&fd_nd->ln_buffer, &fd_nd->next_ln, fd_nd->char_read + 1));
 	}
-	return (build_line(&fd_nd, &fd_head));
+	return (build_ln(&fd_nd, &fd_head));
 }
