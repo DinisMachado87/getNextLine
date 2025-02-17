@@ -6,25 +6,25 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:36:51 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/17 01:21:08 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/17 04:36:55 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-void	*free_node(t_fd_node *fd_node, t_fd_node **fd_list_head)
+void	*free_node(t_fd_node **fd_node, t_fd_node **fd_list_head)
 {
-	if (!fd_node)
+	if (!(*fd_node))
 		return (NULL);
-	if (fd_node->prev_fd_node)
-		fd_node->prev_fd_node->next_fd_node = fd_node->next_fd_node;
+	if ((*fd_node)->prev_fd_node)
+		(*fd_node)->prev_fd_node->next_fd_node = (*fd_node)->next_fd_node;
 	else
-		*fd_list_head = fd_node->next_fd_node;
-	if (fd_node->next_fd_node)
-		fd_node->next_fd_node->prev_fd_node = fd_node->prev_fd_node;
-	free(fd_node->next_line);
-	free(fd_node);
+		(*fd_list_head) = (*fd_node)->next_fd_node;
+	if ((*fd_node)->next_fd_node)
+		(*fd_node)->next_fd_node->prev_fd_node = (*fd_node)->prev_fd_node;
+	free((*fd_node)->next_line);
+	free(*fd_node);
 	return (NULL);
 }
 

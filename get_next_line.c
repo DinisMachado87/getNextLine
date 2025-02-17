@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/17 01:31:19 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/17 04:57:16 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static int ft_strchr(char *str, int c, ssize_t *char_read)
 	ssize_t i_chr;
 	
 	i_chr = 0;
-	if (!str)
+	if (!(str))
 		return (0);
-	while (str[i_chr] && str[i_chr] != (char)c)
+	while ((str)[i_chr] && (str)[i_chr] != (char)c)
 		(i_chr)++;
-	if ((str[i_chr] == (char)c) && ((str[i_chr + 1] != '\0') || ((char)c == '\0')))
+	if (((str)[i_chr] == (char)c) && (((str)[i_chr + 1] != '\0') || ((char)c == '\0')))
 	{
 		*char_read = i_chr;
 		return (*char_read);
@@ -91,49 +91,49 @@ char	*ft_strjoin(char *str_1, char *str_2)
 	return (joined_str);
 }
 
-char *read_until_new_line_or_EOF(t_fd_node *fd_node, t_fd_node **fd_list_head)
+char *read_until_new_line_or_EOF(t_fd_node **fd_node, t_fd_node **fd_list_head)
 {
 	char *read_buffer;
 
 	read_buffer = (char *)malloc(BUFFER_SIZE + 1);
 	if (!read_buffer)
 		return (NULL);
-	fd_node->char_read = read(fd_node->fd, read_buffer, BUFFER_SIZE);
-	if (fd_node->char_read <= 0)
+	(*fd_node)->char_read = read((*fd_node)->fd, read_buffer, BUFFER_SIZE);
+	if ((*fd_node)->char_read <= 0)
 	{
-		fd_node->end = 1;
+		(*fd_node)->end = 1;
 		read_buffer = free_and_null_str(read_buffer);
-		if (fd_node->line_buffer)
-			return (fd_node->line_buffer);
+		if ((*fd_node)->line_buffer)
+			return ((*fd_node)->line_buffer);
 		free_node(fd_node, fd_list_head);
 		return (NULL);
 	}
-	read_buffer[fd_node->char_read] = '\0';
-	if (fd_node->line_buffer)
-		fd_node->line_buffer = ft_strjoin(fd_node->line_buffer, read_buffer);
+	read_buffer[(*fd_node)->char_read] = '\0';
+	if ((*fd_node)->line_buffer)
+		(*fd_node)->line_buffer = ft_strjoin((*fd_node)->line_buffer, read_buffer);
 	else
 	{
-		fd_node->line_buffer = read_buffer;
+		(*fd_node)->line_buffer = read_buffer;
 		read_buffer = NULL;
 	}
-	return (fd_node->line_buffer);
+	return ((*fd_node)->line_buffer);
 }
 
-char *build_line(t_fd_node *fd_node, t_fd_node **fd_list_head)
+char *build_line(t_fd_node **fd_node, t_fd_node **fd_list_head)
 {
 	char *final_str;
 
 	final_str = NULL;
 	while (1)
 	{
-		fd_node->line_buffer = read_until_new_line_or_EOF(fd_node, fd_list_head);
-		if (!fd_node->line_buffer)
+		(*fd_node)->line_buffer = read_until_new_line_or_EOF(fd_node, fd_list_head);
+		if (!(*fd_node)->line_buffer)
 			return (NULL);
-		if (ft_strchr(fd_node->line_buffer, '\n', &fd_node->char_read))
-			return (ft_split(&fd_node->line_buffer, &fd_node->next_line, (fd_node->char_read + 1)));
-		if (fd_node->end)
+		if (ft_strchr((*fd_node)->line_buffer, '\n', &(*fd_node)->char_read))
+			return (ft_split(&(*fd_node)->line_buffer, &(*fd_node)->next_line, (*fd_node)->char_read + 1));
+		if ((*fd_node)->end)
 		{
-			final_str = ft_strjoin(fd_node->line_buffer, final_str);
+			final_str = ft_strjoin((*fd_node)->line_buffer, final_str);
 			free_node(fd_node, fd_list_head);
 			return (final_str);
 		}
@@ -157,5 +157,5 @@ char *get_next_line(int fd)
 		if (ft_strchr(fd_node->line_buffer, '\n', &fd_node->char_read))
 			return (ft_split(&fd_node->line_buffer, &fd_node->next_line, fd_node->char_read + 1));
 	}
-	return (build_line(fd_node, &fd_list_head));
+	return (build_line(&fd_node, &fd_list_head));
 }
