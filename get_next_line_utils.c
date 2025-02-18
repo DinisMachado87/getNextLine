@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:36:51 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/17 16:08:20 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/18 04:32:40 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,15 @@ void	*free_node(t_fd_nd **fd_nd, t_fd_nd **fd_head)
 		(*fd_head) = (*fd_nd)->next_fd_nd;
 	if ((*fd_nd)->next_fd_nd)
 		(*fd_nd)->next_fd_nd->prev_fd_nd = (*fd_nd)->prev_fd_nd;
-	free((*fd_nd)->next_ln);
+	if ((*fd_nd)->next_ln)
+		(*fd_nd)->next_ln = free_and_null_str((*fd_nd)->next_ln);
 	free(*fd_nd);
 	return (NULL);
 }
 
-t_fd_nd *get_or_add_node(int fd, t_fd_nd **fd_head)
+t_fd_nd	*get_or_add_node(int fd, t_fd_nd **fd_head)
 {
-	t_fd_nd *curr_nd;
+	t_fd_nd	*curr_nd;
 
 	curr_nd = *fd_head;
 	while (curr_nd && (curr_nd->fd != fd))
@@ -42,7 +43,6 @@ t_fd_nd *get_or_add_node(int fd, t_fd_nd **fd_head)
 		return (NULL);
 	curr_nd->fd = fd;
 	curr_nd->next_ln = NULL;
-	curr_nd->ln_buffer = NULL;
 	curr_nd->char_read = 0;
 	curr_nd->next_fd_nd = *fd_head;
 	curr_nd->prev_fd_nd = NULL;
@@ -51,4 +51,11 @@ t_fd_nd *get_or_add_node(int fd, t_fd_nd **fd_head)
 		(*fd_head)->prev_fd_nd = curr_nd;
 	*fd_head = curr_nd;
 	return (curr_nd);
+}
+
+char	*free_and_null_str(char *str)
+{
+	if (str)
+		free(str);
+	return (NULL);
 }
