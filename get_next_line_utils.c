@@ -6,12 +6,11 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:36:51 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/18 04:32:40 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/18 06:39:22 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 void	*free_node(t_fd_nd **fd_nd, t_fd_nd **fd_head)
 {

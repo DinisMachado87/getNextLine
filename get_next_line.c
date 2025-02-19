@@ -6,12 +6,11 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/18 04:32:38 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/18 22:10:46 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static int	ft_strchr(char *str, int c, ssize_t *char_read)
 {
@@ -29,7 +28,7 @@ static int	ft_strchr(char *str, int c, ssize_t *char_read)
 	}
 	if ((str[i_chr]) && ((str)[i_chr] == (char)c) && (str[i_chr + 1]))
 	{
-		*char_read = i_chr;
+		*char_read = i_chr + 1;
 		return (*char_read);
 	}
 	return (0);
@@ -101,9 +100,12 @@ char	*read_until_new_ln_or_eof(t_fd_nd **fd_nd, char **ln_buffer)
 	{
 		(*fd_nd)->end = 1;
 		read_buffer = free_and_null_str(read_buffer);
-		if (*ln_buffer)
-			return (*ln_buffer);
-		return (NULL);
+		if ((*fd_nd)->char_read < 0 || !(*ln_buffer) || **ln_buffer == '\0')
+		{
+			*ln_buffer = free_and_null_str(*ln_buffer);
+			return (NULL);
+		}
+		return (*ln_buffer);
 	}
 	read_buffer[(*fd_nd)->char_read] = '\0';
 	*ln_buffer = ft_strjoin(*ln_buffer, read_buffer);
@@ -116,10 +118,8 @@ char	*build_ln(t_fd_nd **fd_nd, t_fd_nd **fd_head, char **ln_buffer)
 	while (1)
 	{
 		*ln_buffer = read_until_new_ln_or_eof(fd_nd, ln_buffer);
-		if (!ln_buffer)
-			return (NULL);
-		if (ft_strchr(*ln_buffer, '\n', &(*fd_nd)->char_read))
-			return (ft_split(ln_buffer, &(*fd_nd)->next_ln, ((*fd_nd)->char_read + 1)));
+		if (*ln_buffer && (ft_strchr(*ln_buffer, '\n', &(*fd_nd)->char_read)))
+			return (ft_split(ln_buffer, &(*fd_nd)->next_ln, (*fd_nd)->char_read));
 		if ((*fd_nd)->end)
 		{
 			free_node(fd_nd, fd_head);
@@ -145,7 +145,7 @@ char	*get_next_line(int fd)
 		ln_buffer = fd_nd->next_ln;
 		fd_nd->next_ln = NULL;
 		if (ft_strchr(ln_buffer, '\n', &fd_nd->char_read))
-			return (ft_split(&ln_buffer, &fd_nd->next_ln, fd_nd->char_read + 1));
+			return (ft_split(&ln_buffer, &fd_nd->next_ln, fd_nd->char_read));
 	}
 	return (build_ln(&fd_nd, &fd_head, &ln_buffer));
 }
