@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:16:11 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/18 22:10:46 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/19 01:30:49 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ static int	ft_strchr(char *str, int c, ssize_t *char_read)
 
 	i_chr = 0;
 	if (!str)
+	{
+		*char_read = 0;
 		return (0);
+	}
 	while (str[i_chr] && (str)[i_chr] != (char)c)
 		(i_chr)++;
 	if ((str[i_chr] == (char)c) && ((char)c == '\0'))
@@ -26,7 +29,7 @@ static int	ft_strchr(char *str, int c, ssize_t *char_read)
 		*char_read = i_chr;
 		return (*char_read);
 	}
-	if ((str[i_chr]) && ((str)[i_chr] == (char)c) && (str[i_chr + 1]))
+	if ((str[i_chr]) && ((str)[i_chr] == (char)c))
 	{
 		*char_read = i_chr + 1;
 		return (*char_read);
@@ -59,33 +62,44 @@ static char	*ft_split(char **in_str, char **splt_str, ssize_t splt_pt)
 	return (*in_str);
 }
 
-char	*ft_strjoin(char *str_1, char *str_2)
+static void ft_strcpy(char *dest, char *src)
 {
-	char	*joined_str;
-	ssize_t	len_1;
-	ssize_t	len_2;
+    ssize_t i;
 
-	if (!str_1 && !str_2)
-		return (NULL);
-	if (!str_1)
-		return (str_2);
-	if (!str_2)
-		return (str_1);
-	ft_strchr(str_1, '\0', &len_1);
-	ft_strchr(str_2, '\0', &len_2);
-	joined_str = (char *)malloc(len_1 + len_2 + 1);
-	if (!joined_str)
-		return (NULL);
-	len_1 = -1;
-	len_2 = 0;
-	while ((str_1)[++len_1])
-		joined_str[len_1] = (str_1)[len_1];
-	while ((str_2)[len_2])
-		joined_str[len_1++] = (str_2)[len_2++];
-	joined_str[len_1] = '\0';
-	str_1 = free_and_null_str(str_1);
-	str_2 = free_and_null_str(str_2);
-	return (joined_str);
+    i = 0;
+    if (src)
+        while (src[i])
+        {
+            dest[i] = src[i];
+            i++;
+        }
+    dest[i] = '\0';
+}
+
+char    *ft_strjoin(char *str_1, char *str_2)
+{
+    char    *joined_str;
+    ssize_t len_1;
+    ssize_t len_2;
+
+    ft_strchr(str_1, '\0', &len_1);
+    ft_strchr(str_2, '\0', &len_2);
+    joined_str = malloc(len_1 + len_2 + 1);
+    if (!joined_str)
+    {
+        free_and_null_str(str_1);
+        free_and_null_str(str_2);
+        return (NULL);
+    }
+    if (str_1)
+        ft_strcpy(joined_str, str_1);
+    else
+        joined_str[0] = '\0';
+    if (str_2)
+        ft_strcpy(joined_str + len_1, str_2);
+    free_and_null_str(str_1);
+    free_and_null_str(str_2);
+    return (joined_str);
 }
 
 char	*read_until_new_ln_or_eof(t_fd_nd **fd_nd, char **ln_buffer)

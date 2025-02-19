@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:36:51 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/18 06:39:22 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/19 00:10:11 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,6 @@ char	*free_and_null_str(char *str)
 {
 	if (str)
 		free(str);
+	str = NULL;
 	return (NULL);
 }
