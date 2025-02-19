@@ -6,7 +6,7 @@
 /*   By: dimachad <dimachad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 21:36:51 by dimachad          #+#    #+#             */
-/*   Updated: 2025/02/19 00:10:11 by dimachad         ###   ########.fr       */
+/*   Updated: 2025/02/19 02:48:27 by dimachad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_fd_nd	*get_or_add_node(int fd, t_fd_nd **fd_head)
 		return (NULL);
 	curr_nd->fd = fd;
 	curr_nd->next_ln = NULL;
-	curr_nd->char_read = 0;
+	curr_nd->chr_read = 0;
 	curr_nd->next_fd_nd = *fd_head;
 	curr_nd->prev_fd_nd = NULL;
 	curr_nd->end = 0;
@@ -52,10 +52,48 @@ t_fd_nd	*get_or_add_node(int fd, t_fd_nd **fd_head)
 	return (curr_nd);
 }
 
+int	find_nl_or_nt(char *str, int c, ssize_t *chr_read)
+{
+	ssize_t	i_chr;
+
+	i_chr = 0;
+	if (!str)
+	{
+		*chr_read = 0;
+		return (0);
+	}
+	while (str[i_chr] && (str)[i_chr] != (char)c)
+		(i_chr)++;
+	if ((str[i_chr] == (char)c) && ((char)c == '\0'))
+	{
+		*chr_read = i_chr;
+		return (*chr_read);
+	}
+	if ((str[i_chr]) && ((str)[i_chr] == (char)c))
+	{
+		*chr_read = i_chr + 1;
+		return (*chr_read);
+	}
+	return (0);
+}
+
 char	*free_and_null_str(char *str)
 {
 	if (str)
 		free(str);
 	str = NULL;
 	return (NULL);
+}
+
+void	ft_strcpy(char *dest, char *src)
+{
+	ssize_t	i;
+
+	i = 0;
+	if (src)
+	{
+		while (*src)
+			dest[i++] = *src++;
+		dest[i] = '\0';
+	}
 }
